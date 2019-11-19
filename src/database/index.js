@@ -2,10 +2,13 @@ import Sequelize from 'sequelize';
 
 import User from '../app/models/User';
 import Student from '../app/models/Student';
+import Plan from '../app/models/Plan';
+import Registration from '../app/models/Registration';
+import Checkin from '../app/models/Checkin';
 
 import dbConfig from '../config/database';
 
-const models = [User, Student];
+const models = [User, Student, Plan, Registration, Checkin];
 
 class ConnDatabase {
   constructor() {
@@ -15,7 +18,9 @@ class ConnDatabase {
   init() {
     this.connection = new Sequelize(dbConfig);
 
-    models.map(model => model.init(this.connection));
+    models
+      .map(model => model.init(this.connection))
+      .map(model => model.associate && model.associate(this.connection.models));
   }
 }
 
